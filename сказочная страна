@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace СказочнаяСтрана
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            const string CommandMilitariIntelligence = "РР";
+            const string CommandArtillery = "АЛ";
+            const string CommandTanks = "ТК";
+            const string CommandAircraft = "ВВС";
+            const string CommandBringOnTheTroops = "Ввести войска";
+            const string CommandInformation = "Информация";
+            const string CommandExit = "Выход";
+
+            string userInput;
+            int potential = 0;
+            int enemyQuantityCombatUnits = 100;
+            int quantityCombatUnits = 100;
+            int enemyDamage;
+            int damage;
+            int permissionArtillery = 5;
+            int permissionTanks = 15;
+            int permissionAircraft = 23;
+            Random random = new Random();
+
+            Console.WriteLine("Добро пожаловать в игру Сказочная страна. Что бы начать игру нажмите \n"+ CommandBringOnTheTroops + "\n" + CommandInformation + "\n" + CommandExit);
+            userInput = Console.ReadLine();
+
+            switch(userInput)
+            {
+                 case CommandBringOnTheTroops:
+                    {
+                        while (quantityCombatUnits > 0 || enemyQuantityCombatUnits > 0)
+                        {
+                            Console.WriteLine("В вашем распоряжении есть : \n разведрота (" + CommandMilitariIntelligence + ") \n артиллерия (" + CommandArtillery + ") \n танки (" + CommandTanks + ") " +
+                            "\n самолеты (" + CommandAircraft + ")");
+                            userInput = Console.ReadLine();
+
+                            switch (userInput)
+                            {
+                                case CommandMilitariIntelligence:
+                                if (quantityCombatUnits > 0)
+                                {
+                                    damage = random.Next(0, 6);
+                                    potential += damage;
+                                    enemyDamage = random.Next(0, 9);
+                                    quantityCombatUnits -= enemyDamage;
+                                    enemyQuantityCombatUnits -= damage;
+                                    if (potential >= 5 && potential <15)
+                                    {
+                                        Console.WriteLine("Вы произвели разведку территорий врага.Стала доступна Артиллерия. ");
+                                    }
+                                    else if(potential>= permissionTanks && potential < permissionAircraft)
+                                    {
+                                        Console.WriteLine("Разведка произведена. Доступно использование танков");
+                                    }
+                                    else if (potential >= permissionAircraft)
+                                    {
+                                        Console.WriteLine("Разведка произведена. Доступно использование авиации");
+                                    }
+                                    else 
+                                    {
+                                        Console.WriteLine("Вы произвели разведку территорий врага. Разведки недостаточно для возможности обстрела территории из артиллерии ");
+                                    }  
+                                }
+                                else
+                                {
+                                    Console.WriteLine("У вас больше нет возможности продолжать войну.Вы проиграли.");
+                                }
+                                Console.WriteLine("Ваш потенциал - " + potential + "Количество армии - " + quantityCombatUnits + " Количество армии врага  - " + enemyQuantityCombatUnits);
+                                    break;
+                                case CommandArtillery:                           
+                                if (potential >= permissionArtillery && quantityCombatUnits > 0)
+                                {
+                                    damage = random.Next(2, 11);
+                                    potential += damage;
+                                    enemyDamage = random.Next(2, 10);
+                                    quantityCombatUnits -= enemyDamage;
+                                    enemyQuantityCombatUnits -= damage;
+                                    
+                                    if (potential >= permissionTanks && potential < permissionArtillery)
+                                    {
+                                        Console.WriteLine("Артподготовка завершена. Доступно использование танков");
+                                    }
+                                    else if (potential >= permissionArtillery)
+                                    {
+                                        Console.WriteLine("Артподготовка завершена. Доступно использование авиации");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Артподготовка завершена. Артиллерии недостаточно для возможности обстрела территории .");
+                                    }
+                                }
+                                else if (potential < 5 && quantityCombatUnits > 0)
+                                {
+                                    Console.WriteLine("Артиллерия доступна от 5 очков потенциала . Необходима разведка. Танки подрываются на минных полях. ПВО противника сбивают наши самолеты. ");
+                                }
+                                Console.WriteLine("Ваш потенциал - " + potential + "Количество армии - " + quantityCombatUnits + " Количество армии врага  - " + enemyQuantityCombatUnits);
+                                    break;
+                                case CommandTanks:
+                                    if (potential >= permissionTanks && quantityCombatUnits > 0)
+                                    {
+                                        damage = random.Next(4, 12);
+                                        potential += damage;
+                                        enemyDamage = random.Next(2, 12);
+                                        quantityCombatUnits -= enemyDamage;
+                                        enemyQuantityCombatUnits -= damage;
+
+                                         if (potential >= permissionAircraft)
+                                        {
+                                           Console.WriteLine("Танки успешно наступают. Доступно использование авиации");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(" Танков недостаточно . Необходимо отправить еще.");
+                                        }
+                                    }
+                                    else if (potential < permissionTanks && quantityCombatUnits > 0)
+                                    {
+                                        Console.WriteLine("Танки доступны от 15 очков потенциала . ПВО противника сбивают наши самолеты и ракеты средней дальности ");
+                                    }
+
+                                    Console.WriteLine("Ваш потенциал - " + potential + "Количество армии - " + quantityCombatUnits + " Количество армии врага  - " + enemyQuantityCombatUnits);
+                                    break;
+                                case CommandAircraft:
+                                    if (potential >= permissionAircraft && quantityCombatUnits > 0)
+                                    {
+                                        damage = random.Next(4, 15);
+                                        potential += damage;
+                                        enemyDamage = random.Next(2, 15);
+                                        quantityCombatUnits -= enemyDamage;
+                                        enemyQuantityCombatUnits -= damage;
+                                        Console.WriteLine("Вы уничтожили часть ПВО врага и часть минных полей. Стали доступна авиация.");
+                                    }
+                                    else if (potential < permissionAircraft && quantityCombatUnits > 0)
+                                    {
+                                        Console.WriteLine("Авиация доступна от 23 очков потенциала . Необходима разведка , артподгатовка либо ввод танков.. ПВО противника сбивают наши самолеты . ");
+                                    }
+                                    Console.WriteLine("Ваш потенциал - " + potential + "Количество армии - " + quantityCombatUnits + " Количество армии врага  - " + enemyQuantityCombatUnits);
+                                    break; 
+                            }
+                            if (enemyQuantityCombatUnits <= 0)
+                            {
+                                Console.WriteLine("Вы победили .Количество вашей армии - " + quantityCombatUnits + " Количество армии врага  - " + enemyQuantityCombatUnits);
+                                Console.ReadKey();
+                                break;
+                            }
+                            else if(quantityCombatUnits <= 0) 
+                            {
+                                Console.WriteLine("Победа врага.  Ваша армия уничтожена. Количество армии врага  - " + enemyQuantityCombatUnits);
+                                Console.ReadKey();
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                case CommandInformation:
+                    {
+                        Console.WriteLine("Вам необходимо уничтожить армию противника.");
+                        break;
+                    }
+                case CommandExit:
+                    {
+                        Console.WriteLine("До свидания");
+                        break;
+                    }                 
+            }     
+        }
+    }
+}
